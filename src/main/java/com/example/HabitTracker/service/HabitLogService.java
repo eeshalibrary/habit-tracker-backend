@@ -1,5 +1,6 @@
 package com.example.HabitTracker.service;
 
+import com.example.HabitTracker.exception.ResourceNotFoundException;
 import com.example.HabitTracker.model.Habit;
 import com.example.HabitTracker.model.HabitLog;
 import com.example.HabitTracker.repository.HabitLogRepository;
@@ -26,7 +27,7 @@ public class HabitLogService {
 
     public HabitLog addLog(Long habitId, String value, LocalDate date){
         Habit h= habitRepository.findById(habitId)
-                .orElseThrow(() -> new RuntimeException("Habit not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Habit not found"));
         switch (h.getTrackingType()){
             case BOOLEAN -> {
                 if (!value.equalsIgnoreCase("true") && !value.equalsIgnoreCase("false")) {
@@ -53,7 +54,7 @@ public class HabitLogService {
     }
     public List<HabitLog> getLogsForHeatMap(Long habitId, LocalDate startDate, LocalDate endDate){
         Habit h=habitRepository.findById(habitId).orElseThrow(
-                ()-> new RuntimeException("Habit not found")
+                ()-> new ResourceNotFoundException("Habit not found")
         );
         return habitLogRepository.findByHabitAndLogDateBetween(h, startDate, endDate);
     }

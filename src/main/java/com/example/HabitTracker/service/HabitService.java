@@ -1,6 +1,7 @@
 package com.example.HabitTracker.service;
 
 
+import com.example.HabitTracker.exception.ResourceNotFoundException;
 import com.example.HabitTracker.model.Habit;
 import com.example.HabitTracker.model.User;
 import com.example.HabitTracker.repository.HabitRepository;
@@ -22,7 +23,7 @@ public class HabitService {
 
     public Habit createHabit(Habit habit){
         User user=userRepository.findByUsername(habit.getUser().getUsername())
-                .orElseThrow(()-> new RuntimeException("User not found"));
+                .orElseThrow(()-> new ResourceNotFoundException("User not found"));
         habit.setUser(user);
         habit.setCreatedDate(LocalDate.now());
         return habitRepository.save(habit);
